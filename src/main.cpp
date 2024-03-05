@@ -299,11 +299,91 @@ void autonomous(void) {
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
 
+void lockCat() {
+  while (catapultRot.angle(rotationUnits::deg) > 75) {
+    catapultLower(30);
+  }
+  catapultStop();
+}
+
 void usercontrol(void) {
   // User control code here, inside the loop
 
   // use this if we have calibration issues. make sure it prevents driver control for at least 2 seconds
   //IMU.calibrate(2000);
+
+  // lower catapult to a safe position
+  lockCat();
+
+  // pre-while loop setup
+  //intak
+  Controller1.ButtonL1.pressed([](){
+    intakeSpin(true);
+  });
+
+  Controller1.ButtonL1.released([](){
+    intakeStop();
+  });
+
+  Controller1.ButtonL2.pressed([](){
+    intakeSpin();
+  });
+
+  Controller1.ButtonL2.released([](){
+    intakeStop();
+  });
+
+  Controller1.ButtonA.pressed([](){
+    wings.toggleWings();
+  });
+
+  // catapult
+  Controller1.ButtonR1.pressed([](){
+    // catapultLaunch();
+    // // these three lines here are what does the automatic arming of the catapult.
+    // wait(50, msec);
+    // waitUntil(getCatAccel() <= 0.1); // <-- might be blocking, which isnt desirable
+    // catapultArm();
+  });
+
+  Controller1.ButtonR1.released([](){
+    // catapultStop();
+  });
+
+  Controller1.ButtonR2.pressed([](){
+    // if (!catInPosArmed()) {
+    //   catapultArm();
+    // }
+
+    // catapultLower();
+  });
+
+  Controller1.ButtonR2.released([](){
+
+  });
+  
+  Controller1.ButtonDown.pressed([](){
+    catapultLower();
+  });
+
+  Controller1.ButtonDown.released([](){
+    stopAutoArming();
+    catapultStop();
+  });
+
+  Controller1.ButtonUp.pressed([](){
+    catapultRaise();
+  });
+
+  Controller1.ButtonUp.released([](){
+    stopAutoArming();
+    catapultStop();
+  });
+
+  //the button formerly known as twitter
+  Controller1.ButtonX.pressed([](){
+    drive.toggleInvertedDrive();
+  });
 
   while (1) {
     // This is the main execution loop for the user control program.
@@ -330,76 +410,6 @@ void usercontrol(void) {
     } else {
       ballKicker.stop(brakeType::brake);
     }
-
-    //intake
-    Controller1.ButtonL1.pressed([](){
-      intakeSpin();
-    });
-
-    Controller1.ButtonL1.released([](){
-      intakeStop();
-    });
-
-    Controller1.ButtonL2.pressed([](){
-      intakeSpin(true);
-    });
-
-    Controller1.ButtonL2.released([](){
-      intakeStop();
-    });
-
-    Controller1.ButtonA.pressed([](){
-      wings.toggleWings();
-    });
-
-    // catapult
-    Controller1.ButtonR1.pressed([](){
-      catapultLaunch();
-      // these three lines here are what does the automatic arming of the catapult.
-      wait(50, msec);
-      waitUntil(getCatAccel() <= 0.1); // <-- might be blocking, which isnt desirable
-      catapultArm();
-    });
-
-    Controller1.ButtonR1.released([](){
-      // catapultStop();
-    });
-
-    Controller1.ButtonR2.pressed([](){
-      if (!catInPosArmed()) {
-        catapultArm();
-      }
-
-      // catapultLower();
-    });
-
-    Controller1.ButtonR2.released([](){
-
-    });
-    
-    Controller1.ButtonDown.pressed([](){
-      catapultLower();
-    });
-
-    Controller1.ButtonDown.released([](){
-      stopAutoArming();
-      catapultStop();
-    });
-
-    Controller1.ButtonUp.pressed([](){
-      catapultRaise();
-    });
-
-    Controller1.ButtonUp.released([](){
-      stopAutoArming();
-      catapultStop();
-    });
-
-    //the button formerly known as twitter
-    Controller1.ButtonX.pressed([](){
-      drive.toggleInvertedDrive();
-    });
-
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
@@ -428,14 +438,15 @@ int main() {
 
     //Controller1.Screen.clearScreen();
     Controller1.Screen.setCursor(1,1);
-    Controller1.Screen.print(gpsHeadingRad());
-    Controller1.Screen.setCursor(1,10);
-    Controller1.Screen.print(Brain.Battery.capacity());
-    Controller1.Screen.setCursor(2,1);
-    Controller1.Screen.print(getX());
-    Controller1.Screen.setCursor(3,1);
-    Controller1.Screen.print(getY());
-    Controller1.Screen.setCursor(2,12);
+    Controller1.Screen.print(catapultRot.angle());
+    // Controller1.Screen.print(gpsHeadingRad());
+    // Controller1.Screen.setCursor(1,10);
+    // Controller1.Screen.print(Brain.Battery.capacity());
+    // Controller1.Screen.setCursor(2,1);
+    // Controller1.Screen.print(getX());
+    // Controller1.Screen.setCursor(3,1);
+    // Controller1.Screen.print(getY());
+    // Controller1.Screen.setCursor(2,12);
     //Controller1.Screen.print(drive.getAngleToPoint(0, 1000));
     Controller1.Screen.print(catapultRot.angle());
 

@@ -11,7 +11,7 @@ void intakeSpin(bool reversed = false);
 
 void intakeStop();
 
-void catapultLower();
+void catapultLower(int pow = 80);
 
 void catapultRaise();
 

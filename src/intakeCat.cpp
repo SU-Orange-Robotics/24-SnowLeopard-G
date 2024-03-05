@@ -14,9 +14,9 @@ void intakeStop() {
     intake.stop();
 }
 
-void catapultLower() {
-    catapultA.spin(directionType::fwd, catPow, percentUnits::pct);
-    catapultB.spin(directionType::fwd, catPow, percentUnits::pct);
+void catapultLower(int pow) {
+    catapultA.spin(directionType::fwd, pow, percentUnits::pct);
+    catapultB.spin(directionType::fwd, pow, percentUnits::pct);
 }
 
 void catapultRaise() {
