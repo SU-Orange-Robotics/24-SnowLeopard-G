@@ -300,10 +300,19 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void lockCat() {
-  while (catapultRot.angle(rotationUnits::deg) > 75) {
-    catapultLower(30);
-  }
-  catapultStop();
+  // ==== WORK IN PROGRESS ====
+  // double catapultRotVal = catapultRot.angle(rotationUnits::deg);
+  // catapultLower(30);
+  // while (catapultRot.angle(rotationUnits::deg) > 75) {
+  //   wait(10, msec);
+
+  //   if (abs(catapultRot.angle(rotationUnits::deg) - catapultRotVal) < 1) {
+  //     break;
+  //   } else {
+  //     catapultRotVal = catapultRot.angle(rotationUnits::deg);
+  //   }
+  // }
+  // catapultStop();
 }
 
 void usercontrol(void) {
@@ -325,13 +334,11 @@ void usercontrol(void) {
     intakeStop();
   });
 
-  Controller1.ButtonL2.pressed([](){
+  Controller1.ButtonL2.pressed([]() {
     intakeSpin();
   });
 
-  Controller1.ButtonL2.released([](){
-    intakeStop();
-  });
+  Controller1.ButtonL2.released(intakeStop);
 
   Controller1.ButtonA.pressed([](){
     wings.toggleWings();
@@ -383,6 +390,14 @@ void usercontrol(void) {
   //the button formerly known as twitter
   Controller1.ButtonX.pressed([](){
     drive.toggleInvertedDrive();
+  });
+
+  Controller1.ButtonB.pressed([](){
+    soleA.set(false);
+  });
+
+  Controller1.ButtonY.pressed([](){
+    soleA.set(true);
   });
 
   while (1) {
