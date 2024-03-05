@@ -14,9 +14,9 @@ void intakeStop() {
     intake.stop();
 }
 
-void catapultLower() {
-    catapultA.spin(directionType::fwd, catPow, percentUnits::pct);
-    catapultB.spin(directionType::fwd, catPow, percentUnits::pct);
+void catapultLower(int pow) {
+    catapultA.spin(directionType::fwd, pow, percentUnits::pct);
+    catapultB.spin(directionType::fwd, pow, percentUnits::pct);
 }
 
 void catapultRaise() {
@@ -37,14 +37,18 @@ void catapultArm() {
     autoArming = false;
 }
 
+void catapultArmToPosition(double pos) {
+    
+}
+
 void catapultLaunch() {
     catapultLower();
-    waitUntil(catapultRot.velocity(velocityUnits::dps) > 2); // needs to be tuned
+    waitUntil(catapultRot.velocity(velocityUnits::dps) > 2);
     catapultStop();
 }
 
 bool catInPosArmed() {
-    double setPos = 174; //197.57, 197.75
+    double setPos = 62; //197.57, 197.75
 
     double currPos = catapultRot.angle(rotationUnits::deg);
     return (currPos <= setPos);

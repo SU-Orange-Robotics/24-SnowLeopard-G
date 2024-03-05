@@ -78,4 +78,7 @@ class Drive {
             return activePID;
         }
 
+        void rightDrive(double pow);
+        void leftDrive(double pow);
+
 };
