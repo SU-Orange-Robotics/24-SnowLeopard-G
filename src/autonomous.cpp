@@ -4,6 +4,13 @@
 #include "drive.h"
 #include "intakeCat.h"
 
+// declare helper functions
+void driveForwardTimed(double pow, double time);
+void greenTurnTimed(double pow, double time);
+void greenTurnToTarget(bool right, double pow, double target);
+void push_ball();
+void intake_and_shoot();
+
 /* ------------------------------------------------ */
 /* ------ Actual Competition Auton goes here ------ */
 /* ------------------------------------------------ */
