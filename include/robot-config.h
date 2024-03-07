@@ -38,6 +38,8 @@ extern motor wingRight;
 
 extern motor ballKicker;
 
+extern digital_out soleA;
+
 extern brain Brain;
 extern controller Controller1;
 
