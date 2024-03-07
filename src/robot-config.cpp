@@ -39,8 +39,11 @@ motor ballKicker(PORT16, gearSetting::ratio18_1, true);
 
 optical colorSensor(PORT14);
 
+
 brain Brain;
 controller Controller1(controllerType::primary);
+
+vex::digital_out soleA(Brain.ThreeWirePort.H);
 
 // declare object-oriented stuff here (that should be globally accessible)
 Drive drive;
