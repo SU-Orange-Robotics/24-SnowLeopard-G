@@ -1,4 +1,4 @@
-# 24-SnowLeopard-Green (DO NOT SYNC FORK)
+# 24-SnowLeopard-Green
 
 the robot has a CATapult, and Syracuse is known for a certian type of weather...
 

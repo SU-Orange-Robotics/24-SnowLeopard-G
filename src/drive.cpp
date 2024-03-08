@@ -8,7 +8,7 @@ using namespace vex;
 
 Drive::Drive() {    
     originCorr = 0;
-    originHeading = IMU.heading();
+    originHeading = imu.heading();
     invertDrive = false;
     activePID = false;
 }
@@ -64,7 +64,7 @@ void Drive::inputAdjust(double &fwd, double &str) {
 }
 
 void Drive::resetHeading() {
-    originHeading = IMU.heading();
+    originHeading = imu.heading();
 }
 
 void Drive::stop() {

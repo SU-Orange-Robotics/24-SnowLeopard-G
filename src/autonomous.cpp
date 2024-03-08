@@ -3,11 +3,11 @@
 #include "robot-config.h"
 #include "drive.h"
 #include "intakeCat.h"
+#include "../seed/include/auto-commands.h"
 
 // declare helper functions
 void driveForwardTimed(double pow, double time);
 void greenTurnTimed(double pow, double time);
-void greenTurnToTarget(bool right, double pow, double target);
 void push_ball();
 void intake_and_shoot();
 
@@ -15,7 +15,21 @@ void intake_and_shoot();
 /* ------ Actual Competition Auton goes here ------ */
 /* ------------------------------------------------ */
 void autonomous_competition(void) {
-    green_skills_auto();
+  // IMU calibration
+  imu.calibrate();
+
+  while (imu.isCalibrating()) {
+    wait(100, msec);
+  }
+
+  // Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(2,1);
+  Controller1.Screen.print("IMU Calibrated");
+  
+  driveForwardTimed(30, 0.5);
+  driveForwardTimed(-30, 0.5);
+
+  greenTurnToTarget(drive, 40, 45);
 }
 
 void greenReleaseIntake() {
@@ -40,8 +54,20 @@ void greenReleaseIntake() {
 
 // ========== some helper functions & sub-routines ==========
 void driveForwardTimed(double pow, double time) {
-  drive.driveForward(pow);
-  wait(time, sec);
+
+  // use a loop to gradually increase speed towards power
+  if (pow > 0) {
+    for (int i = 10; i < pow; i++) {
+      drive.driveForward(i);
+      wait(10, msec);
+    }
+  } else {
+    for (int i = 10; i > pow; i--) {
+      drive.driveForward(i);
+      wait(10, msec);
+    }
+  }
+
   drive.stop();
 }
 
@@ -51,47 +77,6 @@ void greenTurnTimed(double pow, double time) {
   wait(time, sec);
   drive.stop();
 }
-
-void greenTurnToTarget(bool right, double pow, double target) {
-  double error = target - IMU.heading();
-
-  if (error < 0) {
-    error += 360;
-  }
-
-  double p = 1.4;
-
-  double integral_error = 0;
-
-  while (true) {
-    error = target - IMU.heading();
-    integral_error += error;
-  
-    if (error/50 >= 1 || integral_error >= 100) {
-      pow = pow * 1 * p;
-    } else {
-      pow = pow * (error/50) * p;
-    }
-
-    if (right) {
-      drive.leftDrive(pow);
-      drive.rightDrive(-1 * pow);
-    } else {
-      drive.leftDrive(-1 * pow);
-      drive.rightDrive(pow);
-    }
-
-    if (error < 3) {
-      break;
-    }
-
-    wait(10, msec);
-  }
-
-  //stop bot
-  drive.stop();
-}
-
 
 void push_ball() {
   int i;
@@ -171,11 +156,11 @@ void green_skills_auto() {
     catapultArm();
   }
   // turn right to 55
-  greenTurnToTarget(true, 35, 30);
+  // greenTurnToTarget(35, 30);
   
   driveForwardTimed(40, 1);
 
-  greenTurnToTarget(false, 50, 315);
+  // greenTurnToTarget(50, 315);
 
   driveForwardTimed(40, 0.7);
 

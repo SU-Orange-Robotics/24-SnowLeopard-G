@@ -13,7 +13,8 @@
 #include "intakeCat.h"
 #include "wings.h"
 #include "autonomous.h"
-#include "odometry.h"
+// #include "odometry.h"
+#include "../seed/include/odometry.h"
 
 using namespace vex;
 
@@ -45,6 +46,7 @@ void pre_auton(void) {
   RightMotorA.setMaxTorque(maxCurrent, currentUnits::amp);
   RightMotorB.setMaxTorque(maxCurrent, currentUnits::amp);
 
+  ballKicker.setStopping(brakeType::brake);
 
   catapultA.setStopping(brakeType::hold);
   catapultB.setStopping(brakeType::hold);
@@ -62,7 +64,6 @@ void pre_auton(void) {
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
 // === CHECK autonomous.h and autonomous.cpp for the ACTUAL autonomous code ===
-
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              User Control Task                            */
@@ -209,24 +210,28 @@ void usercontrol(void) {
 //
 
 
+
 int main() {
   pre_auton();
+  // Run the pre-autonomous function.
+  Controller1.Screen.clearScreen();
   
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous_competition);
-  Competition.drivercontrol(usercontrol);
+  // Competition.autonomous(autonomous);
+  Competition.drivercontrol(autonomous_competition);
 
-  // Run the pre-autonomous function.
-  Controller1.Screen.clearScreen();
+
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
     updateCatAccel(0.02);
-    odomUpdate();
+    // odomUpdate();
 
-    //Controller1.Screen.clearScreen();
+    // Controller1.Screen.clearScreen();
     Controller1.Screen.setCursor(1,1);
-    Controller1.Screen.print(catapultRot.angle());
+    Controller1.Screen.print("heading %f", imu.heading());
+    // Controller1.Screen.print(catapultRot.angle());
     // Controller1.Screen.print(gpsHeadingRad());
     // Controller1.Screen.setCursor(1,10);
     // Controller1.Screen.print(Brain.Battery.capacity());
@@ -236,8 +241,8 @@ int main() {
     // Controller1.Screen.print(getY());
     // Controller1.Screen.setCursor(2,12);
     //Controller1.Screen.print(drive.getAngleToPoint(0, 1000));
-    Controller1.Screen.print(catapultRot.angle());
+    // Controller1.Screen.print(catapultRot.angle());
 
-    wait(20, msec);
+    this_thread::sleep_for(200);
   }
 }
