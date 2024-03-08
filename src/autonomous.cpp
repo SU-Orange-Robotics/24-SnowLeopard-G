@@ -29,7 +29,7 @@ void autonomous_competition(void) {
   driveForwardTimed(30, 0.5);
   driveForwardTimed(-30, 0.5);
 
-  greenTurnToTarget(drive, 40, 45);
+  turnToTargetIMUOnly(drive, 40, 45);
 }
 
 void greenReleaseIntake() {
