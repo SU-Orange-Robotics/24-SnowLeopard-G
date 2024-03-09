@@ -4,9 +4,11 @@
 
 #include <tuple>
 
+const double initialHeading = 45;
+
 std::tuple<bool, double> getTurnStats(double target) {
-  double currentHeading = imu.heading();
-  if (currentHeading > target) {
+  double currentHeading = imu.heading() - initialHeading;
+  if (currentHeading > 360.0 || currentHeading > target) {
     currentHeading -= 360.0;
   }
   double error = target - currentHeading;
@@ -37,6 +39,7 @@ double flipAngle(double angle) {
 // |
 // | 
 // |-----------> 0 deg
+
 void turnToTargetIMUOnly(Drive& drive, double pow, double target, bool holdPosition = false) {
   target = flipAngle(target);
   std::tuple<bool, double> turnDir;
@@ -55,22 +58,21 @@ void turnToTargetIMUOnly(Drive& drive, double pow, double target, bool holdPosit
   right = std::get<0>(turnDir);
   error = std::get<1>(turnDir);
 
-  while (error >= treshold || holdPosition) {
+  while (true) {
 
     turnDir = getTurnStats(target);
     right = std::get<0>(turnDir);
     error = std::get<1>(turnDir);
-    if (error < treshold) {
-      drive.stop();
-      continue;
-    };
-
     Controller1.Screen.setCursor(3,1);
     Controller1.Screen.print("error %f", error);
+    if (error < treshold) {
+      drive.stop();
+      break;
+    };
 
     integral_error += error;
 
-    powOut = (pow * (error > 50 ? kp : error/50.0) * kp) + limiter(integral_error * ki * (error / 1.0), 2);
+    powOut = (pow * (error > 50 ? kp : error/50.0) * kp) + limiter(integral_error * ki * (error / 1.0), 1.5);
 
     if (right) {
       drive.leftDrive(powOut);
@@ -83,7 +85,7 @@ void turnToTargetIMUOnly(Drive& drive, double pow, double target, bool holdPosit
     wait(10, msec);
   }
 
-  Controller1.Screen.setCursor(3,1);
+  Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print("GOOD");
 
   //stop bot

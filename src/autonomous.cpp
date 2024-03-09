@@ -26,7 +26,7 @@ void oneKick() {
 void kickBalls(int numberOfTries) {
   for (int i = 0; i < numberOfTries; i++) {
     oneKick();
-    wait(1.5, sec);
+    wait(1.2, sec);
   }
 }
 
@@ -42,8 +42,9 @@ void autonomous_competition(void) {
   // IMU calibration
 
   lowerCat();
-  int b = 2;
   imu.calibrate();
+
+  
 
   while (imu.isCalibrating()) {
     wait(100, msec);
@@ -52,19 +53,20 @@ void autonomous_competition(void) {
   // Controller1.Screen.clearScreen();
   Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print("IMU Calibrated");
-  
-  kickBalls(5);
-  
+  kickBalls(15);
   driveForwardTimed(-30, 1.1);
-  turnToTargetIMUOnly(drive, 40, 40);
-  driveForwardTimed(-50, 5);
-  turnToTargetIMUOnly(drive, 40, 90);
-  driveForwardTimed(-50, 1);
+  turnToTargetIMUOnly(drive, 40, 85);
+  driveForwardTimed(-50, 4.3);
+
+  // go forward and score
   turnToTargetIMUOnly(drive, 40, 135);
+  driveForwardTimed(-50, 1);
+  turnToTargetIMUOnly(drive, 40, 175);
   driveForwardTimed(-100, 2);
-  driveForwardTimed(50, 1);
+  driveForwardTimed(50, 0.7);
+  turnToTargetIMUOnly(drive, 40, 175);
   driveForwardTimed(-100, 1.5);
-  driveForwardTimed(50, 1);
+  driveForwardTimed(50, 0.6);
   drive.stop();
 }
 

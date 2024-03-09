@@ -46,7 +46,7 @@ void pre_auton(void) {
   RightMotorA.setMaxTorque(maxCurrent, currentUnits::amp);
   RightMotorB.setMaxTorque(maxCurrent, currentUnits::amp);
 
-  ballKicker.setStopping(brakeType::brake);
+  ballKicker.setStopping(brakeType::hold);
 
   catapultA.setStopping(brakeType::hold);
   catapultB.setStopping(brakeType::hold);
@@ -218,10 +218,7 @@ int main() {
   
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous_competition);
-  // Competition.autonomous(autonomous);
-  Competition.drivercontrol(autonomous_competition);
-
-
+  Competition.drivercontrol(usercontrol);
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
