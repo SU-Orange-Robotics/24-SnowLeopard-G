@@ -4,6 +4,7 @@
 #include "drive.h"
 #include "intakeCat.h"
 #include "../seed/include/auto-commands.h"
+#include <chrono>
 
 // declare helper functions
 void driveForwardTimed(double pow, double time);
@@ -29,8 +30,18 @@ void kickBalls(int numberOfTries) {
   }
 }
 
+void lowerCat() {
+  while (catapultRot.angle(rotationUnits::deg) > 74) {
+    catapultLower(50);
+    wait(5, msec);
+  }
+  catapultStop();
+}
+
 void autonomous_competition(void) {
   // IMU calibration
+
+  lowerCat();
   int b = 2;
   imu.calibrate();
 
@@ -44,14 +55,16 @@ void autonomous_competition(void) {
   
   kickBalls(5);
   
-  drive.driveForward(-30);
-  wait(1.2, sec);
+  driveForwardTimed(-30, 1.1);
   turnToTargetIMUOnly(drive, 40, 40);
-  drive.driveForward(-50);
-  wait(5, sec);
+  driveForwardTimed(-50, 5);
   turnToTargetIMUOnly(drive, 40, 90);
-  drive.driveForward(-100);
-  wait(1.5, sec);
+  driveForwardTimed(-50, 1);
+  turnToTargetIMUOnly(drive, 40, 135);
+  driveForwardTimed(-100, 2);
+  driveForwardTimed(50, 1);
+  driveForwardTimed(-100, 1.5);
+  driveForwardTimed(50, 1);
   drive.stop();
 }
 
@@ -76,21 +89,38 @@ void greenReleaseIntake() {
 }
 
 // ========== some helper functions & sub-routines ==========
+void driveForwardTimedSmoothly(double pow, double time) {
+  // auto startTime = std::chrono::high_resolution_clock::now();
+
+  // if (pow > 0) {
+  //   for (int i = 10; i < pow; i++) {
+  //     // Check elapsed time
+  //     auto currentTime = std::chrono::high_resolution_clock::now();
+  //     auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
+      
+  //     if (elapsedTime >= time) break; // Stop if the specified time has passed
+      
+  //     drive.driveForward(i);
+  //     wait(10, msec);
+  //   }
+  // } else {
+  //   for (int i = 10; i > pow; i--) {
+  //     // Check elapsed time
+  //     auto currentTime = std::chrono::high_resolution_clock::now();
+  //     auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
+      
+  //     if (elapsedTime >= time) break; // Stop if the specified time has passed
+      
+  //     drive.driveForward(i);
+  //     wait(10, msec);
+  //   }
+  // }
+
+  // drive.stop();
+}
 void driveForwardTimed(double pow, double time) {
-
-  // use a loop to gradually increase speed towards power
-  if (pow > 0) {
-    for (int i = 10; i < pow; i++) {
-      drive.driveForward(i);
-      wait(10, msec);
-    }
-  } else {
-    for (int i = 10; i > pow; i--) {
-      drive.driveForward(i);
-      wait(10, msec);
-    }
-  }
-
+  drive.driveForward(pow);
+  wait(time, sec);
   drive.stop();
 }
 
