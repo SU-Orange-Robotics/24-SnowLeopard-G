@@ -14,8 +14,24 @@ void intake_and_shoot();
 /* ------------------------------------------------ */
 /* ------ Actual Competition Auton goes here ------ */
 /* ------------------------------------------------ */
+
+void oneKick() {
+  ballKicker.setReversed(false);
+  ballKicker.spinToPosition(-170, deg, 100, velocityUnits::pct, true);
+  wait(0.2, sec);
+  ballKicker.spinToPosition(0, deg, 100, velocityUnits::pct, true);
+}
+
+void kickBalls(int numberOfTries) {
+  for (int i = 0; i < numberOfTries; i++) {
+    oneKick();
+    wait(1.5, sec);
+  }
+}
+
 void autonomous_competition(void) {
   // IMU calibration
+  int b = 2;
   imu.calibrate();
 
   while (imu.isCalibrating()) {
@@ -26,10 +42,17 @@ void autonomous_competition(void) {
   Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print("IMU Calibrated");
   
-  driveForwardTimed(30, 0.5);
-  driveForwardTimed(-30, 0.5);
-
-  turnToTargetIMUOnly(drive, 40, 45);
+  kickBalls(5);
+  
+  drive.driveForward(-30);
+  wait(1.2, sec);
+  turnToTargetIMUOnly(drive, 40, 40);
+  drive.driveForward(-50);
+  wait(5, sec);
+  turnToTargetIMUOnly(drive, 40, 90);
+  drive.driveForward(-100);
+  wait(1.5, sec);
+  drive.stop();
 }
 
 void greenReleaseIntake() {
