@@ -12,8 +12,10 @@ extern competition Competition;
 // 8 motor 4 WHEEL mechanum drive
 extern motor LeftMotorA;
 extern motor LeftMotorB;
+extern motor LeftMotorC;
 extern motor RightMotorA;
 extern motor RightMotorB;
+extern motor RightMotorC;
 
 
 extern motor intake;

@@ -4,7 +4,15 @@
 
 #include <tuple>
 
-const double initialHeading = 45;
+const double initialHeading = 48;
+
+double realHeading() {
+  double currentHeading = imu.heading() - initialHeading;
+  if (currentHeading > 360.0) {
+    currentHeading -= 360.0;
+  }
+  return currentHeading;
+}
 
 std::tuple<bool, double> getTurnStats(double target) {
   double currentHeading = imu.heading() - initialHeading;

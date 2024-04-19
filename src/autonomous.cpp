@@ -8,6 +8,7 @@
 
 // declare helper functions
 void driveForwardTimed(double pow, double time);
+void driveCustomSpeed(double leftPow, double rightPow, double time);
 void greenTurnTimed(double pow, double time);
 void push_ball();
 void intake_and_shoot();
@@ -18,15 +19,22 @@ void intake_and_shoot();
 
 void oneKick() {
   ballKicker.setReversed(false);
-  ballKicker.spinToPosition(-170, deg, 100, velocityUnits::pct, true);
-  wait(0.2, sec);
+  ballKicker.spinToPosition(-190, deg, 100, velocityUnits::pct, false);
+  int counter = 0;
+  while (ballKicker.position(deg) > -190) {
+    wait(5, msec);
+    if (counter++ > 120) {
+      break;
+    }
+  }
+  
   ballKicker.spinToPosition(0, deg, 100, velocityUnits::pct, true);
 }
 
-void kickBalls(int numberOfTries) {
+void kickBalls(int numberOfTries, double waitTime) {
   for (int i = 0; i < numberOfTries; i++) {
     oneKick();
-    wait(1.1, sec);
+    wait(waitTime, sec);
   }
 }
 
@@ -36,6 +44,74 @@ void lowerCat() {
     wait(5, msec);
   }
   catapultStop();
+}
+
+void goUnderSafely() {
+  // driveCustomSpeed(-50, -51, 3.5);
+  int counter = 0;
+  while (counter++ < 340) {
+    if (realHeading() < 80 || realHeading() > 100) {
+      driveForwardTimed(30, 0.2);
+      turnToTargetIMUOnly(drive, 40, 85);
+      counter += 20;
+    } else {
+      drive.driveForward(-50);
+    }
+
+    wait(10, msec);
+  }
+}
+
+void autonomous_head_to_head(void) {
+  lowerCat();
+  imu.calibrate();
+
+  while (imu.isCalibrating()) {
+    wait(100, msec);
+  }
+
+  kickBalls(11, 1.2);
+
+  driveForwardTimed(-30, 1.5);
+  turnToTargetIMUOnly(drive, 40, 82);
+  // driveForwardTimed(-50, 3.5);
+  driveCustomSpeed(-50, -51, 3.5);
+  // goUnderSafely();
+  driveForwardTimed(-100, 0.5);
+  turnToTargetIMUOnly(drive, 40, 100);
+  // driveCustomSpeed(-50, -45, 1.0);
+
+  // turn
+  driveCustomSpeed(-60, -50, 1.5);
+
+  // push in 1st time
+  // driveForwardTimed(-100, 1.8);
+  driveCustomSpeed(-100, -90, 1.8);
+
+  driveForwardTimed(50, 0.6);
+
+  // scoop balls next to the wllas
+  turnToTargetIMUOnly(drive, 40, 150);
+  driveCustomSpeed(-70, -50, 0.8);
+
+
+  // push in 2nd time
+  driveForwardTimed(-100, 1.3);
+  // driveCustomSpeed(-100, -90, 1.5);
+  driveForwardTimed(50, 0.8);
+
+  // scoop balls next to the walls
+  turnToTargetIMUOnly(drive, 40, 150);
+
+
+  // push in 3rd time
+  for (int i = 0; i < 3; i++) {
+    driveCustomSpeed(-100, -95, 1.5);
+    driveForwardTimed(50, 0.8);
+    turnToTargetIMUOnly(drive, 60, 160);
+  }
+  drive.stop();
+
 }
 
 void autonomous_competition(void) {
@@ -53,30 +129,48 @@ void autonomous_competition(void) {
   // Controller1.Screen.clearScreen();
   Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print("IMU Calibrated");
-  kickBalls(18);
-  driveForwardTimed(-30, 1.3);
-  turnToTargetIMUOnly(drive, 40, 85);
-  driveForwardTimed(-50, 4.4);
+  kickBalls(18, 0.9);
 
-  // go forward and score
-  turnToTargetIMUOnly(drive, 40, 120);
-  driveForwardTimed(-50, 0.5);
+  driveForwardTimed(-30, 1.5);
+  turnToTargetIMUOnly(drive, 40, 82);
+  // driveForwardTimed(-50, 3.5);
+  driveCustomSpeed(-50, -51, 3.5);
+  // goUnderSafely();
+  driveForwardTimed(-100, 0.5);
+  turnToTargetIMUOnly(drive, 40, 100);
+  // driveCustomSpeed(-50, -45, 1.0);
 
-  turnToTargetIMUOnly(drive, 40, 135);
-  driveForwardTimed(-50, 0.7);
-  //
-  turnToTargetIMUOnly(drive, 40, 175);
-  driveForwardTimed(-100, 2);
-  driveForwardTimed(50, 0.7);
-  turnToTargetIMUOnly(drive, 40, 170);
-  driveForwardTimed(-100, 2);
-  driveForwardTimed(50, 0.7);
-  turnToTargetIMUOnly(drive, 40, 170);
-  driveForwardTimed(-100, 1.5);
+  // turn
+  driveCustomSpeed(-60, -50, 1.5);
+
+  // push in 1st time
+  // driveForwardTimed(-100, 1.8);
+  driveCustomSpeed(-100, -90, 1.8);
+
   driveForwardTimed(50, 0.6);
-  drive.stop();
 
-  
+  // scoop balls next to the wllas
+  turnToTargetIMUOnly(drive, 40, 150);
+  driveCustomSpeed(-70, -50, 0.8);
+
+
+  // push in 2nd time
+  driveForwardTimed(-100, 1.3);
+  // driveCustomSpeed(-100, -90, 1.5);
+  driveForwardTimed(50, 0.8);
+
+  // scoop balls next to the walls
+  turnToTargetIMUOnly(drive, 40, 150);
+
+
+  // push in 3rd time
+  // drop wings
+  for (int i = 0; i < 5; i++) {
+    driveCustomSpeed(-100, -95, 1.5);
+    driveForwardTimed(50, 0.8);
+    turnToTargetIMUOnly(drive, 60, 160);
+  }
+  drive.stop();
 }
 
 void greenReleaseIntake() {
@@ -131,6 +225,13 @@ void driveForwardTimedSmoothly(double pow, double time) {
 }
 void driveForwardTimed(double pow, double time) {
   drive.driveForward(pow);
+  wait(time, sec);
+  drive.stop();
+}
+
+void driveCustomSpeed(double leftPow, double rightPow, double time) {
+  drive.leftDrive(leftPow);
+  drive.rightDrive(rightPow);
   wait(time, sec);
   drive.stop();
 }

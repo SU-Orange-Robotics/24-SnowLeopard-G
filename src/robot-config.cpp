@@ -13,8 +13,10 @@ competition Competition;
 // A front, B back
 motor LeftMotorA(PORT17, gearSetting::ratio18_1, false);
 motor LeftMotorB(PORT18, gearSetting::ratio18_1, true);
-motor RightMotorA(PORT13, gearSetting::ratio18_1, true);
-motor RightMotorB(PORT12, gearSetting::ratio18_1, false);
+motor LeftMotorC(PORT15, gearSetting::ratio18_1, false);
+motor RightMotorA(PORT12, gearSetting::ratio18_1, true);
+motor RightMotorB(PORT13, gearSetting::ratio18_1, false);
+motor RightMotorC(PORT14, gearSetting::ratio18_1, true);
 
 motor intake(PORT20, gearSetting::ratio18_1, false);
 

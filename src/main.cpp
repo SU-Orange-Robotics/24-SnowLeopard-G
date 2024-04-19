@@ -91,6 +91,7 @@ void lockCat() {
   // catapultStop();
 }
 
+bool toggleNewWings = true;
 void usercontrol(void) {
   // User control code here, inside the loop
 
@@ -98,7 +99,7 @@ void usercontrol(void) {
   //IMU.calibrate(2000);
 
   // lower catapult to a safe position
-  lockCat();
+  thread t1(lowerCat);
 
   // pre-while loop setup
   //intak
@@ -114,9 +115,9 @@ void usercontrol(void) {
 
   Controller1.ButtonL2.released(intakeStop);
 
-  Controller1.ButtonA.pressed([](){
-    wings.toggleWings();
-  });
+  // Controller1.ButtonA.pressed([](){
+  //   wings.toggleWings();
+  // });
 
   // catapult
   Controller1.ButtonR1.pressed([](){
@@ -128,10 +129,12 @@ void usercontrol(void) {
   });
 
   Controller1.ButtonR1.released([](){
+    lowerCat();
     // catapultStop();
   });
 
   Controller1.ButtonR2.pressed([](){
+    lowerCat();
     // if (!catInPosArmed()) {
     //   catapultArm();
     // }
@@ -162,17 +165,20 @@ void usercontrol(void) {
   });
 
   //the button formerly known as twitter
-  Controller1.ButtonX.pressed([](){
-    drive.toggleInvertedDrive();
-  });
+  // Controller1.ButtonX.pressed([](){
+  //   drive.toggleInvertedDrive();
+  // });
 
-  Controller1.ButtonB.pressed([](){
-    soleA.set(false);
-  });
+  // Controller1.ButtonB.pressed([](){
+  //   soleA.set(false);
+  // });
 
   Controller1.ButtonY.pressed([](){
-    soleA.set(true);
+    soleA.set(toggleNewWings);
+    toggleNewWings = !toggleNewWings;
   });
+
+
 
   while (1) {
     // This is the main execution loop for the user control program.
@@ -197,7 +203,7 @@ void usercontrol(void) {
     } else if (Controller1.ButtonLeft.pressing()){
       ballKicker.spin(directionType::rev, 100, percentUnits::pct);
     } else {
-      ballKicker.stop(brakeType::brake);
+      ballKicker.stop();
     }
 
     wait(20, msec); // Sleep the task for a short amount of time to
@@ -216,8 +222,8 @@ int main() {
   // Run the pre-autonomous function.
   Controller1.Screen.clearScreen();
   
-  // Set up callbacks for autonomous and driver control periods.
-  Competition.autonomous(autonomous_competition);
+  // Competition.autonomous(autonomous_competition);
+  Competition.autonomous(autonomous_head_to_head);
   Competition.drivercontrol(usercontrol);
 
   // Prevent main from exiting with an infinite loop.
