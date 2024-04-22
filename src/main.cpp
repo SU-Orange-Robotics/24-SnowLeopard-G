@@ -11,7 +11,7 @@
 #include "drive.h"
 #include "robot-config.h"
 #include "intakeCat.h"
-#include "wings.h"
+// #include "wings.h"
 #include "autonomous.h"
 // #include "odometry.h"
 #include "../seed/include/odometry.h"
@@ -32,8 +32,6 @@ void pre_auton(void) {
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 
-  wings.initWings();
-
   LeftMotorA.setStopping(brakeType::brake);
   LeftMotorB.setStopping(brakeType::brake);
   RightMotorA.setStopping(brakeType::brake);
@@ -52,6 +50,11 @@ void pre_auton(void) {
   catapultB.setStopping(brakeType::hold);
 
   intake.setStopping(brakeType::brake);
+
+  climberA.setStopping(brakeType::brake);
+  climberB.setStopping(brakeType::brake);
+
+  climberArm.setStopping(brakeType::brake);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -115,36 +118,32 @@ void usercontrol(void) {
 
   Controller1.ButtonL2.released(intakeStop);
 
-  // Controller1.ButtonA.pressed([](){
-  //   wings.toggleWings();
+  // catapult
+  // Controller1.ButtonR1.pressed([](){
+  //   // catapultLaunch();
+  //   // // these three lines here are what does the automatic arming of the catapult.
+  //   // wait(50, msec);
+  //   // waitUntil(getCatAccel() <= 0.1); // <-- might be blocking, which isnt desirable
+  //   // catapultArm();
   // });
 
-  // catapult
-  Controller1.ButtonR1.pressed([](){
-    // catapultLaunch();
-    // // these three lines here are what does the automatic arming of the catapult.
-    // wait(50, msec);
-    // waitUntil(getCatAccel() <= 0.1); // <-- might be blocking, which isnt desirable
-    // catapultArm();
-  });
+  // Controller1.ButtonR1.released([](){
+  //   lowerCat();
+  //   // catapultStop();
+  // });
 
-  Controller1.ButtonR1.released([](){
-    lowerCat();
-    // catapultStop();
-  });
+  // Controller1.ButtonR2.pressed([](){
+  //   lowerCat();
+  //   // if (!catInPosArmed()) {
+  //   //   catapultArm();
+  //   // }
 
-  Controller1.ButtonR2.pressed([](){
-    lowerCat();
-    // if (!catInPosArmed()) {
-    //   catapultArm();
-    // }
+  //   // catapultLower();
+  // });
 
-    // catapultLower();
-  });
+  // Controller1.ButtonR2.released([](){
 
-  Controller1.ButtonR2.released([](){
-
-  });
+  // });
   
   Controller1.ButtonDown.pressed([](){
     catapultLower();
@@ -173,10 +172,10 @@ void usercontrol(void) {
   //   soleA.set(false);
   // });
 
-  Controller1.ButtonY.pressed([](){
-    soleA.set(toggleNewWings);
-    toggleNewWings = !toggleNewWings;
-  });
+  // Controller1.ButtonY.pressed([](){
+  //   soleA.set(toggleNewWings);
+  //   toggleNewWings = !toggleNewWings;
+  // });
 
 
 
@@ -197,6 +196,31 @@ void usercontrol(void) {
 
     // 2 stick arcade
     drive.arcadeDrive(Controller1.Axis3.position(), Controller1.Axis1.position());
+
+
+    // climber stuff temporarily
+    double climbSpeed = 0;
+    double climbArmSpeed = 0;
+    if (Controller1.ButtonR1.pressing()) {
+      climbSpeed = 100;
+    } else if (Controller1.ButtonR2.pressing()) {
+      climbSpeed = -100;
+    } else {
+      climbSpeed = 0;
+    }
+
+    if (Controller1.ButtonX.pressing()) {
+      climbArmSpeed = 40;
+    } else if (Controller1.ButtonB.pressing()) {
+      climbArmSpeed = -40;
+    } else {
+      climbArmSpeed = 0;
+    }
+
+    climberA.spin(directionType::fwd, climbSpeed, percentUnits::pct);
+    climberB.spin(directionType::rev, climbSpeed, percentUnits::pct);
+    climberArm.spin(directionType::fwd, climbArmSpeed, percentUnits::pct);
+
 
     if (Controller1.ButtonRight.pressing()){
       ballKicker.spin(directionType::fwd, 100, percentUnits::pct);

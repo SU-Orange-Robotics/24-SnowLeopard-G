@@ -20,6 +20,10 @@ extern motor RightMotorC;
 
 extern motor intake;
 
+extern motor climberA;
+extern motor climberB;
+extern motor climberArm;
+
 extern motor wingL;
 extern motor wingR;
 
@@ -35,9 +39,6 @@ extern rotation odomCenter;
 
 extern optical colorSensor;
 
-extern motor wingLeft;
-extern motor wingRight;
-
 extern motor ballKicker;
 
 extern digital_out soleA;
@@ -46,4 +47,4 @@ extern brain Brain;
 extern controller Controller1;
 
 extern Drive drive;
-extern Wings wings;
+// extern Wings wings;

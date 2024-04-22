@@ -20,27 +20,31 @@ motor RightMotorC(PORT14, gearSetting::ratio18_1, true);
 
 motor intake(PORT20, gearSetting::ratio18_1, false);
 
+motor climberA(PORT11, gearSetting::ratio18_1, true);
+motor climberB(PORT19, gearSetting::ratio18_1, false);
+
+motor climberArm(PORT1, gearSetting::ratio18_1, false);
+
 motor wingL(PORT9, gearSetting::ratio18_1, false);
 motor wingR(PORT8, gearSetting::ratio18_1, true);
 
-motor catapultA(PORT19, gearSetting::ratio18_1, true); //left
-motor catapultB(PORT11, gearSetting::ratio18_1, false); //right
-
-rotation catapultRot(PORT5, false);
+motor ballKicker(PORT2, gearSetting::ratio18_1, true);
 
 inertial imu(PORT15);
 gps gps1(PORT4, 0, 0, distanceUnits::mm, 180); // port, x, y, distance units, angle offset, turn direction?
+
+
+// ----- not used -----
+motor catapultA(PORT11, gearSetting::ratio18_1, false); //left
+motor catapultB(PORT19, gearSetting::ratio18_1, false); //right
+rotation catapultRot(PORT5, false);
+
 rotation odomLeft(PORT10, true);
 rotation odomRight(PORT2, false);
 rotation odomCenter(PORT3, true);
 
-motor wingLeft(PORT8, gearSetting::ratio18_1, false);
-motor wingRight(PORT9, gearSetting::ratio18_1, true);
-
-motor ballKicker(PORT16, gearSetting::ratio18_1, true);
-
 optical colorSensor(PORT14);
-
+// ----- end not used ----
 
 brain Brain;
 controller Controller1(controllerType::primary);
