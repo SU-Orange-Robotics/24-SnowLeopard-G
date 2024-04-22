@@ -13,8 +13,8 @@
 #include "intakeCat.h"
 // #include "wings.h"
 #include "autonomous.h"
-// #include "odometry.h"
-#include "../seed/include/odometry.h"
+#include "odometry.h"
+#include "../seed/include/orange-odometry.h"
 
 using namespace vex;
 

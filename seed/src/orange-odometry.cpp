@@ -1,26 +1,26 @@
-#include "odometry.h"
+#include "../include/orange-odometry.h"
 
 // ============== EXPERIMENTAL STUFF ==============
-Odometry::Odometry(inertial* inertialSensor, gps* gpsSensor, mode newMode = defaultMode) 
+OrangeOdometry::OrangeOdometry(inertial* inertialSensor, gps* gpsSensor, mode newMode = defaultMode) 
   : imu(inertialSensor), gpsSensor(gpsSensor), odomMode(newMode)
 {
   currentHeading = 0;
 }
 
-void Odometry::resetHeading() {
+void OrangeOdometry::resetHeading() {
   currentHeading = 0;
 }
 
-void Odometry::getIMUHeading() {
+void OrangeOdometry::getIMUHeading() {
   currentHeading = imu->heading();
 }
 
-void printLocation(Brain& brain) {
+void OrangeOdometry::printLocation() {
 
-  brain.Screen.setCursor(1, 1);
+  Brain.Screen.setCursor(1, 1);
   // brain.Screen.print("X: %f", x);
   // brain.Screen.setCursor(2, 1);
   // brain.Screen.print("Y: %f", y);
   // brain.Screen.setCursor(3, 1);
-  brain.Screen.print("Heading: %f", heading);
+  Brain.Screen.print("Heading: %f", currentHeading);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vex.h"
+#include "robot-config.h"
 
 // Odometry class
 // ============== EXPERIMENTAL STUFF ==============
@@ -17,16 +18,16 @@ struct location {
   double heading;
 };
 
-class Odometry {
+class OrangeOdometry {
 public:
 
-  Odometry(inertial* inertialSensor, gps* gpsSensor, mode newMode); // either could be null
+  OrangeOdometry(inertial* inertialSensor, gps* gpsSensor, mode newMode); // either could be null
 
   void resetHeading();
 
   void getIMUHeading();
 
-  // void 
+  void printLocation();
 
 private:
   double currentHeading;
