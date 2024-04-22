@@ -1,6 +1,7 @@
 #include "vex.h"
 #include "drive.h"
 #include "wings.h"
+#include "../seed/include/orange-motor.h"
 
 using namespace vex;
 
@@ -22,7 +23,7 @@ extern motor intake;
 
 extern motor climberA;
 extern motor climberB;
-extern motor climberArm;
+extern orange::Motor climberArm;
 
 extern motor wingL;
 extern motor wingR;

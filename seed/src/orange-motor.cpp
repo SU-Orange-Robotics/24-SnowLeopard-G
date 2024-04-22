@@ -2,18 +2,22 @@
 #include "../include/orange-motor.h"
 
 namespace orange {
-  void Motor::spin(vex::directionType dir, double velocity, vex::velocityUnits units) {
-    setCurrentLimit(velocity);  // Implement current limiting
+  void Motor::spin(vex::directionType dir, double velocity, vex::percentUnits units) {
+    limitCurrent(velocity);
     vex::motor::spin(dir, velocity, units);  // Call the base class spin
+  }
+  void Motor::stop(vex::brakeType mode) {
+    limitCurrent(0);
+    vex::motor::stop(mode);  // Call the base class stop
   }
 
   void Motor::setMaxCurrent(double current) {
     currentLimit = current;
   }
 
-  void Motor::setCurrentLimit(double velocity) {
+  void Motor::limitCurrent(double velocity) {
     // Current limiting logic
-    if (velocity == 0) {
+    if (velocity < 1 || velocity > -1) {
       setMaxTorque(0, vex::currentUnits::amp);
     } else {
       setMaxTorque(currentLimit, vex::currentUnits::amp);
