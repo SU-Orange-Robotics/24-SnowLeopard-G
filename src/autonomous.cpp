@@ -70,33 +70,32 @@ void autonomous_head_to_head(void) {
     wait(100, msec);
   }
 
-  kickBalls(11, 1.2);
+  kickBalls(1, 1.2);
 
-  driveForwardTimed(-30, 1.5);
+  driveForwardTimed(30, 1.5);
   turnToTargetIMUOnly(drive, 40, 82);
   // driveForwardTimed(-50, 3.5);
-  driveCustomSpeed(-50, -51, 3.5);
+  driveCustomSpeed(50, 51, 3.5);
   // goUnderSafely();
-  driveForwardTimed(-100, 0.5);
+  driveForwardTimed(100, 0.5);
   turnToTargetIMUOnly(drive, 40, 100);
-  // driveCustomSpeed(-50, -45, 1.0);
 
   // turn
-  driveCustomSpeed(-60, -50, 1.5);
+  driveCustomSpeed(60, 50, 1.5);
 
   // push in 1st time
   // driveForwardTimed(-100, 1.8);
-  driveCustomSpeed(-100, -90, 1.8);
+  driveCustomSpeed(100, 90, 1.8);
 
   driveForwardTimed(50, 0.6);
 
   // scoop balls next to the wllas
   turnToTargetIMUOnly(drive, 40, 150);
-  driveCustomSpeed(-70, -50, 0.8);
+  driveCustomSpeed(70, 50, 0.8);
 
 
   // push in 2nd time
-  driveForwardTimed(-100, 1.3);
+  driveForwardTimed(100, 1.3);
   // driveCustomSpeed(-100, -90, 1.5);
   driveForwardTimed(50, 0.8);
 
@@ -106,7 +105,7 @@ void autonomous_head_to_head(void) {
 
   // push in 3rd time
   for (int i = 0; i < 3; i++) {
-    driveCustomSpeed(-100, -95, 1.5);
+    driveCustomSpeed(100, 95, 1.5);
     driveForwardTimed(50, 0.8);
     turnToTargetIMUOnly(drive, 60, 160);
   }

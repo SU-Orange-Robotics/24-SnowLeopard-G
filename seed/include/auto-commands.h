@@ -4,7 +4,7 @@
 
 #include <tuple>
 
-const double initialHeading = 48;
+const double initialHeading = 41;
 
 double realHeading() {
   double currentHeading = imu.heading() - initialHeading;

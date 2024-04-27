@@ -30,8 +30,8 @@ motor wingR(PORT8, gearSetting::ratio18_1, true);
 
 motor ballKicker(PORT2, gearSetting::ratio18_1, true);
 
-inertial imu(PORT15);
-gps gps1(PORT4, 0, 0, distanceUnits::mm, 180); // port, x, y, distance units, angle offset, turn direction?
+inertial imu(PORT9);
+gps gps1(PORT3, 0, 0, distanceUnits::mm, 180); // port, x, y, distance units, angle offset, turn direction?
 
 
 // ----- not used -----
