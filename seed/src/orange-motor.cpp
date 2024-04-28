@@ -17,7 +17,7 @@ namespace orange {
 
   void Motor::limitCurrent(double velocity) {
     // Current limiting logic
-    if (velocity < 1 || velocity > -1) {
+    if (velocity > -1 && velocity < 1) {
       setMaxTorque(0, vex::currentUnits::amp);
     } else {
       setMaxTorque(currentLimit, vex::currentUnits::amp);

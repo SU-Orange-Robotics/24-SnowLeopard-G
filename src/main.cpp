@@ -177,7 +177,15 @@ void usercontrol(void) {
   //   toggleNewWings = !toggleNewWings;
   // });
 
-
+  // ------ climberArm rotates ------
+  Controller1.ButtonX.pressed([]() {
+    climberArm.spin(directionType::fwd, -100, percentUnits::pct);
+  });
+  Controller1.ButtonX.released([]() { climberArm.stop();});
+  Controller1.ButtonB.pressed([]() {
+    climberArm.spin(directionType::fwd, 100, percentUnits::pct);
+  });
+  Controller1.ButtonB.released([]() { climberArm.stop(); });
 
   while (1) {
     // This is the main execution loop for the user control program.
@@ -200,7 +208,6 @@ void usercontrol(void) {
 
     // climber stuff temporarily
     double climbSpeed = 0;
-    double climbArmSpeed = 0;
     if (Controller1.ButtonR1.pressing()) {
       climbSpeed = 100;
     } else if (Controller1.ButtonR2.pressing()) {
@@ -209,18 +216,8 @@ void usercontrol(void) {
       climbSpeed = 0;
     }
 
-    if (Controller1.ButtonX.pressing()) {
-      climbArmSpeed = 40;
-    } else if (Controller1.ButtonB.pressing()) {
-      climbArmSpeed = -40;
-    } else {
-      climbArmSpeed = 0;
-    }
-
     climberA.spin(directionType::fwd, climbSpeed, percentUnits::pct);
     climberB.spin(directionType::rev, climbSpeed, percentUnits::pct);
-    climberArm.spin(directionType::fwd, climbArmSpeed, percentUnits::pct);
-
 
     if (Controller1.ButtonRight.pressing()){
       ballKicker.spin(directionType::fwd, 100, percentUnits::pct);

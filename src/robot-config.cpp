@@ -23,7 +23,7 @@ motor intake(PORT20, gearSetting::ratio18_1, false);
 motor climberA(PORT11, gearSetting::ratio18_1, true);
 motor climberB(PORT19, gearSetting::ratio18_1, false);
 
-orange::Motor climberArm(PORT1, gearSetting::ratio18_1, false, 1.0);
+orange::Motor climberArm(PORT1, gearSetting::ratio18_1, false, 0.5);
 
 motor wingL(PORT9, gearSetting::ratio18_1, false);
 motor wingR(PORT8, gearSetting::ratio18_1, true);

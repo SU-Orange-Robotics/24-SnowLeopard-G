@@ -9,6 +9,7 @@ public:
   Motor(int32_t port, vex::gearSetting gear = vex::gearSetting::ratio18_1, bool isReversed = false, double currentLimit = 2.5)
       : vex::motor(port, gear, isReversed) {
     this->currentLimit = currentLimit;
+    this->setMaxTorque(currentLimit, vex::currentUnits::amp);
   }
 
   // try to use these two functions instead of the other base class functions
